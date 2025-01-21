@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateAssignmentPayload } from './assignments.interface';
+import {
+  CreateAssignmentPayload,
+  FindAllAssignmentsPayload,
+  FindAllAssignmentsReturn,
+} from './assignments.interface';
 
 @Injectable()
 export class AssignmentsService {
@@ -8,5 +12,15 @@ export class AssignmentsService {
 
   async create(payload: CreateAssignmentPayload): Promise<void> {
     await this.prismaService.assignments.create({ data: payload });
+  }
+
+  async findAll({
+    subject,
+  }: FindAllAssignmentsPayload): Promise<FindAllAssignmentsReturn[]> {
+    return this.prismaService.assignments.findMany({
+      where: {
+        ...(subject && { subject }),
+      },
+    });
   }
 }

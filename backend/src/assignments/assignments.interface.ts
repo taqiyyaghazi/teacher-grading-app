@@ -9,3 +9,17 @@ export interface CreateAssignmentPayload {
   content: string;
   studentId: string;
 }
+
+export interface FindAllAssignmentsPayload {
+  subject?: AssignmentSubject;
+}
+
+export interface FindAllAssignmentsReturn {
+  id: string;
+  subject: string;
+  title: string;
+  content: string;
+  studentId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

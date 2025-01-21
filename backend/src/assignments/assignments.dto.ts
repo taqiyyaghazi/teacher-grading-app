@@ -15,3 +15,13 @@ export class CreateAssignmentRequestDto {
   @IsString()
   content: string;
 }
+
+export class FindAllAssignmentsResponseDto {
+  id: string;
+  subject: string;
+  title: string;
+  content: string;
+  studentId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

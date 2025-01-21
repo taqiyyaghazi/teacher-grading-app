@@ -16,10 +16,10 @@ export class UsersService {
       throw new BadRequestException('User already exists');
     }
 
-    await bcrypt.hash(payload.password, 10);
+    const hashedPassword = await bcrypt.hash(payload.password, 10);
 
     await this.prismaService.users.create({
-      data: payload,
+      data: { ...payload, password: hashedPassword },
     });
   }
 }

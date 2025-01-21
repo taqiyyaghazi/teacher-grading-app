@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
+import { Grade } from './grades.interface';
 
 export class CreateGradeRequestDto {
   @IsNotEmpty()
@@ -14,4 +15,15 @@ export class CreateGradeRequestDto {
   @IsNotEmpty()
   @IsString()
   assignmentId: string;
+}
+
+export class FindAllGradesByStudentIdResponseDto {
+  id: string;
+  subject: string;
+  title: string;
+  content: string;
+  studentId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  grades: Grade[];
 }

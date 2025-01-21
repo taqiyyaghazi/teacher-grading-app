@@ -5,4 +5,5 @@ export interface LoginPayload {
 
 export interface LoginReturn {
   accessToken: string;
+  role: string;
 }

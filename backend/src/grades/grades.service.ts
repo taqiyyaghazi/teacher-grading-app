@@ -1,6 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGradePayload } from './grades.interface';
+import {
+  CreateGradePayload,
+  FindAllGradesByStudentIdPayload,
+  FindAllGradesByStudentIdReturn,
+} from './grades.interface';
 
 @Injectable()
 export class GradesService {
@@ -25,5 +33,25 @@ export class GradesService {
     }
 
     await this.prismaService.grades.create({ data: payload });
+  }
+
+  async findAllByStudentId({
+    studentId,
+    userId,
+  }: FindAllGradesByStudentIdPayload): Promise<
+    FindAllGradesByStudentIdReturn[]
+  > {
+    if (userId !== studentId) {
+      throw new ForbiddenException('You can only view your own grades');
+    }
+
+    return this.prismaService.assignments.findMany({
+      where: {
+        studentId,
+      },
+      include: {
+        grades: true,
+      },
+    });
   }
 }

@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AssignmentsModule } from './assignments/assignments.module';
+import { GradesModule } from './grades/grades.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AssignmentsModule } from './assignments/assignments.module';
     AuthModule,
     AssignmentsModule,
     PrismaModule,
+    GradesModule,
     JwtModule.registerAsync({
       global: true,
       useFactory() {

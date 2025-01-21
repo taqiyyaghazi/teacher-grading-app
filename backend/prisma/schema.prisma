@@ -8,13 +8,27 @@ generator client {
 }
 
 model Users {
+  id          String        @id @default(uuid())
+  email       String        @unique
+  name        String
+  password    String
+  role        String
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  assignments Assignments[]
+
+  @@map("users")
+}
+
+model Assignments {
   id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      String
+  subject   String
+  title     String
+  content   String
+  studentId String   @map("student_id")
+  student   Users    @relation(fields: [studentId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("users")
+  @@map("assignments")
 }

@@ -33,7 +33,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const accessToken = await this.jwtService.signAsync({ id: isUserExist.id });
+    const accessToken = await this.jwtService.signAsync({
+      id: isUserExist.id,
+      role: isUserExist.role,
+    });
 
     return { accessToken };
   }

@@ -13,3 +13,12 @@ export type Assignment = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type AssignmentGrade = {
+  createdAt: Date;
+  id: string;
+  subject: AssignmentSubject;
+  title: string;
+  content: string;
+  grade: Grade | null;
+};

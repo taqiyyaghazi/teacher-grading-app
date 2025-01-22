@@ -6,6 +6,18 @@ export const api = create({
 });
 
 api.addResponseTransform((response) => {
+  if (response.status && [403, 401].includes(response.status)) {
+    Swal.fire({
+      title: 'Error!',
+      text: response.data?.message || 'Internal Server Error',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    }).then(() => {
+      window.location.href = '/';
+    });
+    return;
+  }
+
   if (!response.ok) {
     Swal.fire({
       title: 'Error!',
@@ -13,7 +25,6 @@ api.addResponseTransform((response) => {
       icon: 'error',
       confirmButtonText: 'OK',
     });
-    return;
   }
 });
 

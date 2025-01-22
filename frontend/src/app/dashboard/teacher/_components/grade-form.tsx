@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { useAssignmentStore } from '@/stores/assignment-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
@@ -18,7 +19,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  grade: z.number().min(0).max(100),
+  grade: z.coerce.number().min(0).max(100),
   feedback: z.string().min(1),
 });
 
@@ -34,9 +35,11 @@ const GradeForm = () => {
   const { assessAssignment, selectedAssignment, isLoadingAssessment } =
     useAssignmentStore();
 
+  const { toast } = useToast();
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (selectedAssignment) {
-      assessAssignment({ ...data, assignmentId: selectedAssignment.id });
+      assessAssignment({ ...data, assignmentId: selectedAssignment.id }, toast);
     }
   };
 
@@ -45,7 +48,7 @@ const GradeForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 w-full max-w-sm"
+          className="space-y-4 w-full"
         >
           <FormField
             control={form.control}
@@ -66,11 +69,11 @@ const GradeForm = () => {
             name="feedback"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>Feedback</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Give feedback to students"
-                    className="resize-none"
+                    className="w-full"
                     {...field}
                   />
                 </FormControl>

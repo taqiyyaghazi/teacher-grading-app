@@ -13,4 +13,5 @@ export class LoginRequestDto {
 
 export class LoginResponseDto {
   accessToken: string;
+  role: string;
 }

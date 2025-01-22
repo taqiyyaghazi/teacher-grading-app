@@ -59,6 +59,9 @@ export class GradesService {
       include: {
         grade: true,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
   }
 }

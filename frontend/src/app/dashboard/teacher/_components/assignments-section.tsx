@@ -15,7 +15,7 @@ const AssignmentSection = () => {
   }
 
   return (
-    <section className="space-y-4 py-4">
+    <section className="space-y-4 py-4 px-8 md:px-16">
       {assignments.map((item) => (
         <AssignmentCard key={item.id} {...item} />
       ))}

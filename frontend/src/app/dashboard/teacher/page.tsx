@@ -4,7 +4,7 @@ import HeaderSection from './_components/header-section';
 
 export default async function DashboardTeacher() {
   return (
-    <main className="px-16">
+    <main>
       <HeaderSection />
       <AssignmentSection />
     </main>

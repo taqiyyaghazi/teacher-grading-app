@@ -1,5 +1,5 @@
 import { api } from '@/services/api';
-import { setAuthData } from '@/services/local-storage';
+import { removeAuthData, setAuthData } from '@/services/local-storage';
 import { LoginResponse } from '@/types/api';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import Swal from 'sweetalert2';
@@ -14,8 +14,13 @@ type LoginPayload = {
   router: AppRouterInstance;
 };
 
+type LogoutPayload = {
+  router: AppRouterInstance;
+};
+
 export type AuthActions = {
   login: (payload: LoginPayload) => void;
+  logout: (payload: LogoutPayload) => void;
 };
 
 export type AuthStore = AuthState & AuthActions;
@@ -43,5 +48,9 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
     }
 
     set({ isLoading: false });
+  },
+  logout: ({ router }) => {
+    removeAuthData();
+    router.push('/');
   },
 }));

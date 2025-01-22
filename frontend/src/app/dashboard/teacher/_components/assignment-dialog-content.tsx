@@ -16,7 +16,7 @@ const AssignmentDialogContent = () => {
   }
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:max-w-[600px]">
       <DialogHeader>
         <DialogTitle>Assess Assignment</DialogTitle>
       </DialogHeader>

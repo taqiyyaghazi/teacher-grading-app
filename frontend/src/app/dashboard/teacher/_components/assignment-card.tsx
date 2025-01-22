@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,20 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import { formatDate } from '@/lib/utils';
 import { useAssignmentStore } from '@/stores/assignment-store';
 import { Assignment } from '@/types/assignment';
 import AssignmentDialogContent from './assignment-dialog-content';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
 
 const AssignmentCard = (props: Assignment) => {
   const { selectAssignment } = useAssignmentStore();
+  const { isOpenDialog, openDialog, closeDialog } = useAssignmentStore();
+
   return (
-    <Card key={props.id} className="p-2">
+    <Card className="p-2">
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
+        <CardTitle className="flex flex-wrap gap-2 justify-between items-center">
           <p>{props.title}</p>
           {props.grade ? (
             <Badge variant="default">Assessed</Badge>
@@ -38,10 +40,20 @@ const AssignmentCard = (props: Assignment) => {
         </div>
       </CardHeader>
       <CardFooter>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button onClick={() => selectAssignment(props.id)}>Detail</Button>
-          </DialogTrigger>
+        <Button
+          onClick={() => {
+            selectAssignment(props.id);
+            openDialog();
+          }}
+        >
+          Detail
+        </Button>
+        <Dialog
+          open={isOpenDialog}
+          onOpenChange={(isOpenDialog) =>
+            isOpenDialog ? openDialog() : closeDialog()
+          }
+        >
           <AssignmentDialogContent />
         </Dialog>
       </CardFooter>

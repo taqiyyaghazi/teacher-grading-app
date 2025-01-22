@@ -1,9 +1,14 @@
+import { Toast } from '@/hooks/use-toast';
 import { api } from '@/services/api';
-import { AssessAsignmentResponse, GetAssignmentsResponse } from '@/types/api';
+import {
+  AssessAsignmentResponse,
+  GetAssignmentsResponse,
+  SubmitAssignmentResponse,
+} from '@/types/api';
 import { Assignment } from '@/types/assignment';
 import { AssignmentSubject } from '@/types/enum';
-import Swal from 'sweetalert2';
 import { create } from 'zustand';
+import { useGradeStore } from './grade-store';
 
 export type AssignmentState = {
   isLoading: boolean;
@@ -11,6 +16,7 @@ export type AssignmentState = {
   assignments: Assignment[];
   filterSubject: AssignmentSubject | null;
   selectedAssignment: null | Assignment;
+  isOpenDialog: boolean;
 };
 
 type AssessAsignmentPayload = {
@@ -19,11 +25,26 @@ type AssessAsignmentPayload = {
   assignmentId: string;
 };
 
+type SubmitAssignmentPayload = {
+  subject: AssignmentSubject;
+  title: string;
+  content: string;
+};
+
 export type AssignmentActions = {
+  openDialog: () => void;
+  closeDialog: () => void;
   getAssignments: () => Promise<void>;
   setFilterSubject: (subject: AssignmentSubject | 'ALL') => void;
   selectAssignment: (id: string) => void;
-  assessAssignment: (payload: AssessAsignmentPayload) => Promise<void>;
+  assessAssignment: (
+    payload: AssessAsignmentPayload,
+    toast: (props: Toast) => void
+  ) => Promise<void>;
+  submitAssignment: (
+    payload: SubmitAssignmentPayload,
+    toast: (props: Toast) => void
+  ) => Promise<void>;
 };
 
 export type AssignmentStore = AssignmentState & AssignmentActions;
@@ -34,18 +55,20 @@ const initState: AssignmentState = {
   assignments: [],
   filterSubject: null,
   selectedAssignment: null,
+  isOpenDialog: false,
 };
 
 export const useAssignmentStore = create<AssignmentState & AssignmentActions>(
   (set, get) => ({
     ...initState,
+    openDialog: () => set({ isOpenDialog: true }),
+    closeDialog: () => set({ isOpenDialog: false }),
     getAssignments: async () => {
       set({ isLoading: true });
       const querySubject = get().filterSubject;
       const response = await api.get<GetAssignmentsResponse>(
         `/assignments${querySubject ? `?subject=${querySubject}` : ''}`
       );
-      console.log(response);
 
       if (response.ok && response.data?.result) {
         set({ assignments: response.data.result });
@@ -65,7 +88,7 @@ export const useAssignmentStore = create<AssignmentState & AssignmentActions>(
         get().assignments.find((assignment) => assignment.id === id) || null;
       set({ selectedAssignment: assignment });
     },
-    assessAssignment: async (payload: AssessAsignmentPayload) => {
+    assessAssignment: async (payload, toast) => {
       set({ isLoadingAssessment: true });
 
       const response = await api.post<AssessAsignmentResponse>(
@@ -74,17 +97,34 @@ export const useAssignmentStore = create<AssignmentState & AssignmentActions>(
       );
 
       if (response.ok && response.data?.message) {
-        Swal.fire({
-          icon: 'success',
+        toast({
           title: 'Success!',
-          text: response.data.message,
+          description: response.data.message,
         });
+        get().getAssignments();
+        get().selectAssignment(payload.assignmentId);
       }
 
-      get().getAssignments();
-      get().selectAssignment(payload.assignmentId);
+      set({ isLoadingAssessment: false, isOpenDialog: false });
+    },
+    submitAssignment: async (payload, toast) => {
+      set({ isLoading: true });
 
-      set({ isLoadingAssessment: false });
+      const getGrades = useGradeStore.getState().getGrades;
+
+      const response = await api.post<SubmitAssignmentResponse>(
+        '/assignments',
+        payload
+      );
+
+      if (response.ok && response.data?.message) {
+        getGrades();
+        toast({
+          title: 'Success!',
+          description: response.data.message,
+        });
+      }
+      set({ isLoading: false, isOpenDialog: false });
     },
   })
 );

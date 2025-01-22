@@ -38,6 +38,6 @@ export class AuthService {
       role: isUserExist.role,
     });
 
-    return { accessToken, role: isUserExist.role };
+    return { accessToken, role: isUserExist.role, userId: isUserExist.id };
   }
 }

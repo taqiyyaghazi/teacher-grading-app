@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  client:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      depends_on:
+        - server
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile 
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=supersecret
+      - CORS_ORIGIN=http://localhost:3000
+    ports:
+      - "3001:3001"

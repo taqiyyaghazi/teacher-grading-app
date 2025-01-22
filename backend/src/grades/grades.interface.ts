@@ -14,7 +14,6 @@ export interface Grade {
   id: string;
   grade: number;
   feedback: string;
-  assignmentId: string;
   teacherId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -28,5 +27,5 @@ export interface FindAllGradesByStudentIdReturn {
   studentId: string;
   createdAt: Date;
   updatedAt: Date;
-  grades: Grade[];
+  grade: Grade;
 }

@@ -21,7 +21,12 @@ export class FindAllAssignmentsResponseDto {
   subject: string;
   title: string;
   content: string;
-  studentId: string;
+  student: { name: string };
+  grade: {
+    createdAt: Date;
+    feedback: string;
+    grade: number;
+    teacher: { name: string };
+  } | null;
   createdAt: Date;
-  updatedAt: Date;
 }

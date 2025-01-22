@@ -1,29 +1,31 @@
 import {
+  CallHandler,
+  ExecutionContext,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Response<T> {
-  result?: T;
-  messsage?: string;
+  result: T;
+  message: string;
 }
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
+export class MessageInterceptor<T> implements NestInterceptor<T, Response<T>> {
+  constructor(private readonly message: string) {}
+
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
-        if (!data?.message) {
-          return { result: data };
-        }
-        return data;
+        return {
+          result: data,
+          message: this.message,
+        };
       }),
     );
   }

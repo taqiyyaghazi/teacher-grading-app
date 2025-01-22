@@ -1,3 +1,4 @@
+import { Assignment } from './assignment';
 import { UserRole } from './enum';
 
 type ApiResponse<T> = {
@@ -11,3 +12,7 @@ export type LoginResponse = ApiResponse<{
 }>;
 
 export type CreateAccountResponse = ApiResponse<undefined>;
+
+export type GetAssignmentsResponse = ApiResponse<Assignment[]>;
+
+export type AssessAsignmentResponse = ApiResponse<undefined>

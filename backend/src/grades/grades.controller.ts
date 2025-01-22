@@ -7,6 +7,7 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { UserRole } from 'src/users/users.interface';
 import { User, UserInfo } from 'src/common/decorators/user.decorator';
 import { FindAllAssignmentsResponseDto } from 'src/assignments/assignments.dto';
+import { Message } from 'src/common/decorators/message.decorator';
 
 @Controller('grades')
 export class GradesController {
@@ -14,6 +15,7 @@ export class GradesController {
 
   @UseGuards(RoleGuard)
   @Roles(UserRole.TEACHER)
+  @Message('Successfully assessed')
   @Post()
   create(
     @Body() body: CreateGradeRequestDto,
@@ -28,7 +30,7 @@ export class GradesController {
   findByStudentId(
     @Param('studentId') studentId: string,
     @User() user: UserInfo,
-  ): Promise<FindAllAssignmentsResponseDto[]> {
+  ): Promise<any[]> {
     return this.gradesService.findAllByStudentId({
       studentId,
       userId: user.id,

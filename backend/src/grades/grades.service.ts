@@ -22,17 +22,24 @@ export class GradesService {
       throw new BadRequestException('Assignment not found');
     }
 
-    const isGradeExist = await this.prismaService.grades.findFirst({
-      where: {
-        assignmentId: payload.assignmentId,
-      },
-    });
-
-    if (isGradeExist) {
+    if (isAssignmentExist.gradeId) {
       throw new BadRequestException('Assignment already graded');
     }
 
-    await this.prismaService.grades.create({ data: payload });
+    const createdGrade = await this.prismaService.grades.create({
+      data: {
+        feedback: payload.feedback,
+        grade: payload.grade,
+        teacherId: payload.teacherId,
+      },
+    });
+
+    await this.prismaService.assignments.update({
+      where: { id: payload.assignmentId },
+      data: {
+        gradeId: createdGrade.id,
+      },
+    });
   }
 
   async findAllByStudentId({
@@ -50,7 +57,7 @@ export class GradesService {
         studentId,
       },
       include: {
-        grades: true,
+        grade: true,
       },
     });
   }

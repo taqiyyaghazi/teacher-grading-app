@@ -16,3 +16,11 @@ api.addResponseTransform((response) => {
     return;
   }
 });
+
+api.addRequestTransform((request) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (token) {
+    request.headers = { Authorization: `Bearer ${token}` };
+  }
+});

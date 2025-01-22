@@ -28,23 +28,23 @@ model Assignments {
   content   String
   studentId String   @map("student_id")
   student   Users    @relation(fields: [studentId], references: [id])
+  gradeId   String?  @map("grade_id")
+  grade     Grades?  @relation(fields: [gradeId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  grades    Grades[]
 
   @@map("assignments")
 }
 
 model Grades {
-  id           String      @id @default(uuid())
-  grade        Int
-  feedback     String
-  assignmentId String      @map("assignment_id")
-  assignment   Assignments @relation(fields: [assignmentId], references: [id])
-  teacherId    String      @map("teacher_id")
-  teacher      Users       @relation(fields: [teacherId], references: [id])
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  id          String        @id @default(uuid())
+  grade       Int
+  feedback    String
+  teacherId   String        @map("teacher_id")
+  teacher     Users         @relation(fields: [teacherId], references: [id])
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  assignments Assignments[]
 
   @@map("grades")
 }

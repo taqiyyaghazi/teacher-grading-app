@@ -20,10 +20,6 @@ export type AuthActions = {
 
 export type AuthStore = AuthState & AuthActions;
 
-export const defaultInitState: AuthState = {
-  isLoading: false,
-};
-
 const initState: AuthState = {
   isLoading: false,
 };

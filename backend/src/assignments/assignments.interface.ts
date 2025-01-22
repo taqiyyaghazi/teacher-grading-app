@@ -19,7 +19,12 @@ export interface FindAllAssignmentsReturn {
   subject: string;
   title: string;
   content: string;
-  studentId: string;
   createdAt: Date;
-  updatedAt: Date;
+  student: { name: string };
+  grade: {
+    createdAt: Date;
+    feedback: string;
+    grade: number;
+    teacher: { name: string };
+  } | null;
 }

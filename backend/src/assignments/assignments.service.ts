@@ -21,6 +21,33 @@ export class AssignmentsService {
       where: {
         ...(subject && { subject }),
       },
+      select: {
+        createdAt: true,
+        id: true,
+        title: true,
+        subject: true,
+        content: true,
+        student: {
+          select: {
+            name: true,
+          },
+        },
+        grade: {
+          select: {
+            createdAt: true,
+            grade: true,
+            feedback: true,
+            teacher: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        gradeId: 'asc',
+      },
     });
   }
 }

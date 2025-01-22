@@ -9,6 +9,7 @@ import { UserRole } from 'src/users/users.interface';
 import { User, UserInfo } from 'src/common/decorators/user.decorator';
 import { RoleGuard } from 'src/common/guards/role.guard';
 import { AssignmentSubject } from './assignments.interface';
+import { Message } from 'src/common/decorators/message.decorator';
 
 @Controller('assignments')
 export class AssignmentsController {
@@ -16,6 +17,7 @@ export class AssignmentsController {
 
   @UseGuards(RoleGuard)
   @Roles(UserRole.STUDENT)
+  @Message('Assignment submitted successfully')
   @Post()
   async create(
     @Body() body: CreateAssignmentRequestDto,

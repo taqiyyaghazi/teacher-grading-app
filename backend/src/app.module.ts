@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { GradesModule } from './grades/grades.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
     AssignmentsModule,
     PrismaModule,
     GradesModule,
+    NotificationsModule,
     JwtModule.registerAsync({
       global: true,
       useFactory() {

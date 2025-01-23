@@ -19,6 +19,28 @@ export const formatDate = (date: Date): string => {
   return Intl.DateTimeFormat('en-US', options).format(new Date(date));
 };
 
+export const formatRelativeTime = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - new Date(date).getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+
+  if (diffSeconds < 60) {
+    return rtf.format(-diffSeconds, 'seconds');
+  }
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  if (diffMinutes < 60) {
+    return rtf.format(-diffMinutes, 'minutes');
+  }
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) {
+    return rtf.format(-diffHours, 'hours');
+  }
+  const diffDays = Math.floor(diffHours / 24);
+  return rtf.format(-diffDays, 'days');
+};
+
 export const translateAssignmentSubject = (subject: AssignmentSubject) => {
   switch (subject) {
     case AssignmentSubject.ENGLISH_WRITING:

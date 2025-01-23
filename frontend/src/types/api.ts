@@ -1,5 +1,6 @@
 import { Assignment, AssignmentGrade } from './assignment';
 import { UserRole } from './enum';
+import { Notification } from './notification';
 
 type ApiResponse<T> = {
   message: string;
@@ -21,3 +22,5 @@ export type AssessAsignmentResponse = ApiResponse<undefined>;
 export type GetGradesResponse = ApiResponse<AssignmentGrade[]>;
 
 export type SubmitAssignmentResponse = ApiResponse<undefined>;
+
+export type GetNotificationsResponse = ApiResponse<Notification[]>;

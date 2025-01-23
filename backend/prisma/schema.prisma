@@ -4,20 +4,21 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 model Users {
-  id              String        @id @default(uuid())
-  email           String        @unique
+  id              String          @id @default(uuid())
+  email           String          @unique
   name            String
   password        String
   role            String
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
   assignments     Assignments[]
-  gradesAsTeacher Grades[]      @relation()
+  gradesAsTeacher Grades[]        @relation()
+  notifications   Notifications[]
 
   @@map("users")
 }
@@ -48,4 +49,14 @@ model Grades {
   assignments Assignments[]
 
   @@map("grades")
+}
+
+model Notifications {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      Users    @relation(fields: [userId], references: [id])
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
 }

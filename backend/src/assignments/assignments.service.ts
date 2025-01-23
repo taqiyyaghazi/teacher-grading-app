@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateAssignmentPayload,
@@ -11,7 +11,24 @@ export class AssignmentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(payload: CreateAssignmentPayload): Promise<void> {
-    await this.prismaService.assignments.create({ data: payload });
+    const user = await this.prismaService.users.findUnique({
+      where: { id: payload.studentId },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User Not Found');
+    }
+    const assignment = await this.prismaService.assignments.create({
+      data: payload,
+      select: { title: true },
+    });
+
+    await this.prismaService.notifications.create({
+      data: {
+        userId: user.id,
+        message: `New assignment submitted by: ${user.name} with title: "${assignment.title}".`,
+      },
+    });
   }
 
   async findAll({
